@@ -5,7 +5,6 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\RentController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\FieldController;
-use App\Http\Controllers\ReportController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -24,10 +23,12 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', [HomeController::class, 'index'])->name('home');
-Route::get('/report', [ReportController::class, 'index'])->name('report');
+
+//rent
 Route::get('/rent', [RentController::class, 'index'])->name('rent');
 Route::post('/rent', [RentController::class, 'store'])->name('rent.store');
-Route::get('/rent/update/{id}', [RentController::class, 'update'])->name('Rent.update');
+Route::get('/rent/update/{id}', [RentController::class, 'update'])->name('rent.update');
+Route::get('/rent/delete/{id}', [RentController::class, 'destory'])->name('rent.delete');
 
 //customer
 Route::get('/customer', [CustomerController::class, 'index'])->name('customer');

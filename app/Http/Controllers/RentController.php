@@ -11,13 +11,21 @@ class RentController extends Controller
 {
     public function index()
     {
+        $fieldCheck = Field::all();
+        $fieldAvailable = [];
+        foreach ($fieldCheck as $key => $value) {
+          $checkRent = Rent::where('id_field',$value->id)->where('status','BOOKING')->first();
+          if (!$checkRent) {
+            $fieldAvailable[] = $value;
+          }
+        }
         $data = [
             'rent' => Rent::select('rents.*', 'customers.name', 'fields.name as field_name')
                 ->join('customers', 'rents.id_customer', '=', 'customers.id')
                 ->join('fields', 'rents.id_field', '=', 'fields.id')
                 ->get(),
             'customer' => Customer::all(),
-            'field' => Field::all(),
+            'field' => $fieldAvailable,
             'title' => 'Sewa',
             'totalCostAll' => Rent::sum('cost_total'),
         ];

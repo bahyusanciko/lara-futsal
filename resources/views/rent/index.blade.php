@@ -22,51 +22,52 @@
                         <i class="fa fa-plus text-primary"></i> Tambah
                     </button>
                 </div>
-                <div class="card-body table-responsive" id="printableId">
-                    <table class="table table-striped table-hover">
-                        <tr>
-                            <th>No</th>
-                            <th>Nama</th>
-                            <th>Lapangan</th>
-                            <th>Tanggal</th>
-                            <th>Mulai</th>
-                            <th>Selesai</th>
-                            <th>DP</th>
-                            <th>Harga Perjam</th>
-                            <th>Total</th>
-                            <th>STATUS</th>
-                            <th class="text-center">Aksi</th>
-                        </tr>
-                        @foreach ($rent as $data)
-                        <tr>
-                            <td>{{ $loop->iteration }}</td>
-                            <td>{{ $data->name }}</td>
-                            <td>{{ $data->field_name }}</td>
-                            <td>{{ $data->booking_date }}</td>
-                            <td>{{ $data->booking_start }}</td>
-                            <td>{{ $data->booking_end }}</td>
-                            <td>{{ "Rp " . number_format($data->down_payment,2,',','.') }}</td>
-                            <td>{{ "Rp " . number_format($data->cost_hourly,2,',','.') }}</td>
-                            <td>{{ "Rp " . number_format($data->cost_total,2,',','.') }}</td>
-                            <td class="{{$data->status}}">{{$data->status}}</td>
-                            <td class="text-center">
-                                <button type="button" onclick="editData({{$data->id}})" class="btn btn-outline-success">
-                                    <i class="fa fa-check"></i>
-                                </button> |
-                                <button type="button" class="btn btn-outline-danger"
-                                    onclick="deleteData({{$data->id}})">
-                                    <i class="fa fa-trash"></i>
-                                </button>
-                            </td>
-                        </tr>
-                        @endforeach
-                    </table>
+                <div id="printableId">
+                    <div class="card-body">
+                        <table class="table">
+                            <tr>
+                                <th>No</th>
+                                <th>Nama</th>
+                                <th>Lapangan</th>
+                                <th>Tanggal</th>
+                                <th>Mulai</th>
+                                <th>Selesai</th>
+                                <th>DP</th>
+                                <th>Harga Perjam</th>
+                                <th>Total</th>
+                                <th>STATUS</th>
+                                <th class="text-center">Aksi</th>
+                            </tr>
+                            @foreach ($rent as $data)
+                            <tr>
+                                <td>{{ $loop->iteration }}</td>
+                                <td>{{ $data->name }}</td>
+                                <td>{{ $data->field_name }}</td>
+                                <td>{{ $data->booking_date }}</td>
+                                <td>{{ $data->booking_start }}</td>
+                                <td>{{ $data->booking_end }}</td>
+                                <td>{{ "Rp " . number_format($data->down_payment,2,',','.') }}</td>
+                                <td>{{ "Rp " . number_format($data->cost_hourly,2,',','.') }}</td>
+                                <td>{{ "Rp " . number_format($data->cost_total,2,',','.') }}</td>
+                                <td class="{{$data->status}}">{{$data->status}}</td>
+                                <td class="text-center">
+                                    <button type="button" onclick="editData({{$data->id}})" class="btn btn-outline-success">
+                                        <i class="fa fa-check"></i>
+                                    </button> |
+                                    <button type="button" class="btn btn-outline-danger"
+                                        onclick="deleteData({{$data->id}})">
+                                        <i class="fa fa-trash"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            @endforeach
+                        </table>
+                    </div>
                     <div class="card-footer">
                         <button type="button" onclick="printTabel()" class="float-start btn btn-outline-success">
                             <i class="fa fa-print"></i>
                         </button>
                         <h3 class="float-end">Total Pemasukan : {{ "Rp " . number_format($totalCostAll,2,',','.') }}</h3>
-    
                     </div>
                 </div>
             </div>
@@ -118,14 +119,14 @@
                         <div class="col-4">
                             <div class="mb-3">
                                 <label for="field" class="form-label">Mulai Jam</label>
-                                <input type="number" min="1" max="24" class="form-control" id="startTime" required
+                                <input type="time"  class="form-control" id="startTime" required
                                     name="booking_start">
                             </div>
                         </div>
                         <div class="col-4">
                             <div class="mb-3">
                                 <label for="field" class="form-label">Selesai Jam</label>
-                                <input type="number" min="1" max="24" class="form-control" id="endTime" required
+                                <input type="time"  class="form-control" id="endTime" required
                                     name="booking_end">
                             </div>
                         </div>
@@ -226,8 +227,8 @@
                 footer: '<a href>Why do I have this issue?</a>'
             })
         } else {
-            let x = startTime.value;
-            let y = endTime.value;
+            let x = startTime.value.substring(0, 2);
+            let y = endTime.value.substring(0, 2);
             let deffs = Math.abs(x - y);
             console.log(deffs)
             totalCost.value = deffs * costHour.value;
@@ -241,7 +242,10 @@
     function printTabel() {
         var printHtml = window.open('', 'PRINT', 'height=400,width=600');
 
-        printHtml.document.write('<html><head>');
+        printHtml.document.write(`<html>
+            <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+        <head>`);
         printHtml.document.write(document.getElementById("printableId").innerHTML);
         printHtml.document.write('</body></html>');
     

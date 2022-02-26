@@ -30,7 +30,7 @@ class HomeController extends Controller
             'title' => 'Dashboard',
             'customer' => Customer::count(),
             'field' => Field::count(),
-            'rent' => Rent::count(),
+            'rent' => Rent::where('status','BOOKING')->count(),
         ];
         return view('home',$data);
     }

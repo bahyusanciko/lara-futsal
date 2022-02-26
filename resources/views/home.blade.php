@@ -5,7 +5,7 @@
     <div class="row">
         <div class="col-4">
             <div class="card">
-                <div class="card-header text-center">Sewa</div>
+                <div class="card-header text-center">Sewa Aktif</div>
                 <div class="card-body">
                     <h1 class="text-center">{{$rent}}</h1>
                 </div>
